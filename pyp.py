@@ -2,6 +2,14 @@ import tkinter as tk
 from tkinter import ttk
 import theming
 
+def obj_summary(obj):
+    if type(obj) == dict:
+        return "{}"
+    elif type(obj) == list:
+        return "[]"
+    
+    return str(obj)
+
 class Window(tk.Tk):
     def __init__(self, obj):
         super().__init__()
@@ -64,17 +72,11 @@ class Window(tk.Tk):
         """
         Recursively populate the tree with a python object
         """
-
-        if type(object) == dict:
-            for key in object:
-                valString = str(type(object[key])) if type(object[key]) in [dict, list] else str(object[key])
-
-                i = self.insert(parentIid, [key, valString])
-                self.populate(i, object[key])
-
-        elif type(object) == list:
-            for index, i in enumerate(object):
-                valString = str(type(i)) if type(i) in [dict, list] else str(i)
-
-                iid = self.insert(parentIid, [index, valString])
-                self.populate(iid, i)
+        
+        if type(object) in [dict, list]:
+            indices = object.keys() if type(object) == dict else range(len(object))
+            
+            for index in indices:
+                summary = obj_summary(object[index])
+                iid = self.insert(parentIid, [index, summary])
+                self.populate(iid, object[index])
