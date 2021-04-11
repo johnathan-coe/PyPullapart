@@ -4,9 +4,9 @@ import theming
 
 def obj_summary(obj):
     if type(obj) == dict:
-        return "{}"
+        return "{...}"
     elif type(obj) == list:
-        return "[]"
+        return "[...]"
     
     return str(obj)
 
@@ -75,7 +75,7 @@ class Window(tk.Tk):
         
         if type(object) in [dict, list]:
             indices = object.keys() if type(object) == dict else range(len(object))
-            
+
             for index in indices:
                 summary = obj_summary(object[index])
                 iid = self.insert(parentIid, [index, summary])
