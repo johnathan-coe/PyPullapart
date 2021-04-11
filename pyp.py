@@ -25,15 +25,16 @@ class Window(tk.Tk):
     def computeBreadcrumbs(self, ev):
         items = []
 
+        # Get the selected entry
         iid = int(self.tree.focus())
 
+        # Travel up the tree until we reach the root
         while iid != 0:
-            print(iid)
-            print(self.tree.item(iid))
-            items.insert(0, str(self.tree.item(iid)["values"][0]))
-
+            key = self.tree.item(iid)["values"][0]
+            items.insert(0, str(key))
             iid = int(self.tree.parent(iid))
 
+        # Place the breadcrumbs in the label
         self.breadcrumbs.config(text="> " + " > ".join(items))
 
     def insert(self, parent, values):
