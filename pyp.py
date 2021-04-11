@@ -15,9 +15,26 @@ class Window(tk.Tk):
         self.tree = ttk.Treeview(self, columns=('#0', '#1', '#2'), height=30)
         self.tree.pack(fill=tk.BOTH)
         self.tree.insert('', tk.END, values=[str(type(obj)), ""], iid=0, open=True)
+        
+        # Compute breadcrumbs on button release
+        self.tree.bind('<ButtonRelease-1>', self.computeBreadcrumbs)
 
         # Populate the treeview
         self.populate(0, obj)
+
+    def computeBreadcrumbs(self, ev):
+        items = []
+
+        iid = int(self.tree.focus())
+
+        while iid != 0:
+            print(iid)
+            print(self.tree.item(iid))
+            items.insert(0, str(self.tree.item(iid)["values"][0]))
+
+            iid = int(self.tree.parent(iid))
+
+        self.breadcrumbs.config(text="> " + " > ".join(items))
 
     def insert(self, parent, values):
         """
